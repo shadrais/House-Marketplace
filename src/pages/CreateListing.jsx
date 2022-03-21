@@ -100,7 +100,7 @@ const CreateListing = () => {
   const onSubmit = async (e) => {
     e.preventDefault()
     let location
-    let geoLocation = {}
+    let geolocation = {}
 
     if (geoloactionEnabled) {
       const response = await fetch(
@@ -109,8 +109,8 @@ const CreateListing = () => {
 
       const data = await response.json()
 
-      geoLocation.lat = data.results[0]?.geometry.location.lat ?? 0
-      geoLocation.lng = data.results[0]?.geometry.location.lng ?? 0
+      geolocation.lat = data.results[0]?.geometry.location.lat ?? 0
+      geolocation.lng = data.results[0]?.geometry.location.lng ?? 0
       location =
         data.status === 'ZERO_RESULTS'
           ? undefined
@@ -123,8 +123,8 @@ const CreateListing = () => {
 
       console.log(data)
     } else {
-      geoLocation.lng = longitude
-      geoLocation.lat = latitude
+      geolocation.lng = longitude
+      geolocation.lat = latitude
     }
     location = address
 
@@ -182,7 +182,7 @@ const CreateListing = () => {
     const formDataCopy = {
       ...formData,
       timestamp: serverTimestamp(),
-      geoLocation: geoLocation,
+      geolocation: geolocation,
       imgUrls,
     }
     formDataCopy.location = location
