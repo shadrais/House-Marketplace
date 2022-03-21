@@ -11,6 +11,7 @@ import {
 import { db } from '../firebase.config'
 import { v4 as uuidv4 } from 'uuid'
 import { toast } from 'react-toastify'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 
 const CreateListing = () => {
   const auth = getAuth()
@@ -124,8 +125,8 @@ const CreateListing = () => {
     } else {
       geoLocation.lng = longitude
       geoLocation.lat = latitude
-      location = address
     }
+    location = address
 
     // Store image in firebase
     const storeImage = async (image) => {
@@ -177,8 +178,23 @@ const CreateListing = () => {
       toast.error('Images not uploaded')
       return
     })
-    console.log(imgUrls)
+
+    const formDataCopy = {
+      ...formData,
+      timestamp: serverTimestamp(),
+      geoLocation: geoLocation,
+      imgUrls,
+    }
+    formDataCopy.location = location
+    delete formDataCopy.images
+    delete formDataCopy.address
+    !formDataCopy.offer && delete formDataCopy.discountedPrice
+
+    const docRef = await addDoc(collection(db, 'listing'), formDataCopy)
+
     setLoading(false)
+    toast.success('Listing Saved')
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`)
   }
 
   return (
