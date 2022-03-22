@@ -12,6 +12,7 @@ import SignUp from './pages/SignUp'
 import Listing from './pages/Listing'
 import ForgotPassword from './pages/ForgotPassword'
 import CreateListing from './pages/CreateListing'
+import Contact from './pages/Contact'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             path='/category/:categoryName/:listingId'
             element={<Listing />}
           />
+          <Route path='/contact/:landlordId' element={<Contact />} />
           <Route path='/create-listing' element={<CreateListing />} />
           <Route to='/profile' element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
