@@ -417,6 +417,11 @@ const CreateListing = () => {
           <button type='submit' className='primaryButton createListingButton'>
             Create Listing
           </button>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
         </form>
       </main>
     </div>
