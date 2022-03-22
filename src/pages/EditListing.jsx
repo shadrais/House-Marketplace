@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Spinner from '../components/Spinner'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import {
@@ -11,13 +11,15 @@ import {
 import { db } from '../firebase.config'
 import { v4 as uuidv4 } from 'uuid'
 import { toast } from 'react-toastify'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
 
 const EditListing = () => {
   const auth = getAuth()
   const navigate = useNavigate()
+  const params = useParams()
   const isMounted = useRef(true)
   const [loading, setLoading] = useState(false)
+  const [listing, setListing] = useState(false)
   const [formData, setFormData] = useState({
     type: 'rent',
     name: '',
@@ -36,7 +38,30 @@ const EditListing = () => {
   // eslint-disable-next-line no-unused-vars
   const [geoloactionEnabled, setGeoloactionEnabled] = useState(true)
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    if (listing && listing.userRef !== auth.currentUser.uid) {
+      toast.error('You cannot edit this listing.')
+      navigate('/')
+    }
+  })
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchListing = async () => {
+      const docRef = doc(db, 'listing', params.listingId)
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        setListing(docSnap.data())
+        setFormData({ ...docSnap.data(), address: docSnap.data().location })
+        setLoading(false)
+      } else {
+        navigate('/')
+        toast.error('Listing does not exist')
+      }
+    }
+
+    fetchListing()
+  }, [params.listingId, navigate])
 
   useEffect(() => {
     if (isMounted) {
@@ -89,8 +114,6 @@ const EditListing = () => {
         ...prevState,
         images: e.target.files,
       }))
-      console.log('e.target.files', e.target.files)
-      console.log('Images', images)
     }
     if (!e.target.files) {
       setFormData((prevState) => ({
@@ -102,6 +125,7 @@ const EditListing = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     let location
     let geolocation = {}
 
@@ -123,8 +147,6 @@ const EditListing = () => {
         setLoading(false)
         toast.error('Enter Valid Addess')
       }
-
-      console.log(data)
     } else {
       geolocation.lng = longitude
       geolocation.lat = latitude
@@ -144,15 +166,16 @@ const EditListing = () => {
         uploadTask.on(
           'state_changed',
           (snapshot) => {
+            // eslint-disable-next-line no-unused-vars
             const progress =
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            console.log('Upload is ' + progress + '% done')
+            // console.log('Upload is ' + progress + '% done')
             switch (snapshot.state) {
               case 'paused':
-                console.log('Upload is paused')
+                // console.log('Upload is paused')
                 break
               case 'running':
-                console.log('Upload is running')
+                // console.log('Upload is running')
                 break
               default:
                 break
@@ -160,7 +183,7 @@ const EditListing = () => {
           },
           (error) => {
             reject(error)
-            console.log(error)
+            // console.log(error)
           },
           () => {
             // Handle successful uploads on complete
@@ -172,11 +195,10 @@ const EditListing = () => {
         )
       })
     }
-    console.log('images', images)
+    // console.log('images', images)
     const imgUrls = await Promise.all(
       [...images].map((image) => storeImage(image))
     ).catch((error) => {
-      console.log(error)
       setLoading(false)
       toast.error('Images not uploaded')
       return
@@ -193,10 +215,10 @@ const EditListing = () => {
     delete formDataCopy.address
     !formDataCopy.offer && delete formDataCopy.discountedPrice
 
-    const docRef = await addDoc(collection(db, 'listing'), formDataCopy)
-
+    const docRef = doc(db, 'listing', params.listingId)
+    await updateDoc(docRef, formDataCopy)
     setLoading(false)
-    toast.success('Listing Saved')
+    toast.success('Listing saved')
     navigate(`/category/${formDataCopy.type}/${docRef.id}`)
   }
 
@@ -422,7 +444,7 @@ const EditListing = () => {
             required
           />
           <button type='submit' className='primaryButton createListingButton'>
-            Create Listing
+            Edit Listing
           </button>
         </form>
       </main>

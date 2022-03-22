@@ -10,6 +10,7 @@ import { db } from '../firebase.config'
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import OAuth from '../components/OAuth'
+import { toast } from 'react-toastify'
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -51,7 +52,7 @@ const SignUp = () => {
 
       navigate('/')
     } catch (error) {
-      console.log(error)
+      toast.error('Something Went Wrong')
     }
   }
 

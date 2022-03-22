@@ -47,9 +47,7 @@ const Category = () => {
         })
         setListings(listing)
         setLoading(false)
-        console.log(listing)
       } catch (error) {
-        console.log(error)
         toast.error('Something Went Wrong')
       }
     }
@@ -83,9 +81,7 @@ const Category = () => {
       })
       setListings((prevState) => [...prevState, ...listing])
       setLoading(false)
-      console.log(listing)
     } catch (error) {
-      console.log(error)
       toast.error('Something Went Wrong')
     }
   }

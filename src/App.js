@@ -13,6 +13,7 @@ import Listing from './pages/Listing'
 import ForgotPassword from './pages/ForgotPassword'
 import CreateListing from './pages/CreateListing'
 import Contact from './pages/Contact'
+import EditListing from './pages/EditListing'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           />
           <Route path='/contact/:landlordId' element={<Contact />} />
           <Route path='/create-listing' element={<CreateListing />} />
+          <Route path='/edit-listing/:listingId' element={<EditListing />} />
           <Route to='/profile' element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
           </Route>

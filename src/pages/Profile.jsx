@@ -96,6 +96,10 @@ const Profile = () => {
     }
   }
 
+  const onEdit = (listingId) => {
+    navigate(`/edit-listing/${listingId}`)
+  }
+
   if (loading) <Spinner />
 
   return (
@@ -152,7 +156,7 @@ const Profile = () => {
                   listing={listing.data}
                   id={listing.id}
                   onDelete={() => onDelete(listing.id)}
-                  // onEdit={() => onEdit(listing.id)}
+                  onEdit={() => onEdit(listing.id)}
                 />
               ))}
             </ul>

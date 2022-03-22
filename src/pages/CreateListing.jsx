@@ -86,8 +86,6 @@ const CreateListing = () => {
         ...prevState,
         images: e.target.files,
       }))
-      console.log('e.target.files', e.target.files)
-      console.log('Images', images)
     }
     if (!e.target.files) {
       setFormData((prevState) => ({
@@ -120,8 +118,6 @@ const CreateListing = () => {
         setLoading(false)
         toast.error('Enter Valid Addess')
       }
-
-      console.log(data)
     } else {
       geolocation.lng = longitude
       geolocation.lat = latitude
@@ -141,15 +137,16 @@ const CreateListing = () => {
         uploadTask.on(
           'state_changed',
           (snapshot) => {
+            // eslint-disable-next-line no-unused-vars
             const progress =
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            console.log('Upload is ' + progress + '% done')
+            // console.log('Upload is ' + progress + '% done')
             switch (snapshot.state) {
               case 'paused':
-                console.log('Upload is paused')
+                // console.log('Upload is paused')
                 break
               case 'running':
-                console.log('Upload is running')
+                // console.log('Upload is running')
                 break
               default:
                 break
@@ -157,7 +154,7 @@ const CreateListing = () => {
           },
           (error) => {
             reject(error)
-            console.log(error)
+            // console.log(error)
           },
           () => {
             // Handle successful uploads on complete
@@ -169,11 +166,9 @@ const CreateListing = () => {
         )
       })
     }
-    console.log('images', images)
     const imgUrls = await Promise.all(
       [...images].map((image) => storeImage(image))
     ).catch((error) => {
-      console.log(error)
       setLoading(false)
       toast.error('Images not uploaded')
       return

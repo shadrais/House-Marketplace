@@ -46,9 +46,7 @@ const Offers = () => {
         })
         setListings(listing)
         setLoading(false)
-        console.log(listing)
       } catch (error) {
-        console.log(error)
         toast.error('Something Went Wrong')
       }
     }
@@ -81,9 +79,7 @@ const Offers = () => {
       })
       setListings((prevState) => [...prevState, ...listing])
       setLoading(false)
-      console.log(listing)
     } catch (error) {
-      console.log(error)
       toast.error('Something Went Wrong')
     }
   }
