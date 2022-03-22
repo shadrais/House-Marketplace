@@ -92,6 +92,7 @@ button {
 .category,
 .explore {
   margin: 1rem;
+  height: 110vh;
 }
 @media (min-width: 1024px) {
   .pageContainer,
@@ -140,7 +141,7 @@ button {
 }
 
 .navbar {
-  position: sticky;
+  position: fixed;
   left: 0;
   bottom: 0;
   right: 0;
