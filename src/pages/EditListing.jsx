@@ -446,6 +446,11 @@ const EditListing = () => {
           <button type='submit' className='primaryButton createListingButton'>
             Edit Listing
           </button>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         </form>
       </main>
     </div>

@@ -98,6 +98,7 @@ const CreateListing = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     let location
     let geolocation = {}
 
