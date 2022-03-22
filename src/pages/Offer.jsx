@@ -17,6 +17,7 @@ import ListingItem from '../components/ListingItem'
 const Offers = () => {
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState([])
+  const [lastFetchedListing, setLastFetchedListing] = useState(null)
 
   // const params = useParams()
 
@@ -33,6 +34,8 @@ const Offers = () => {
 
         const querySnap = await getDocs(q)
 
+        const lastVisible = querySnap.docs[querySnap.docs.length - 1]
+        setLastFetchedListing(lastVisible)
         const listing = []
 
         querySnap.forEach((doc) => {
@@ -52,6 +55,38 @@ const Offers = () => {
 
     fetchListings()
   }, [])
+
+  const fetchMoreListing = async () => {
+    try {
+      const listingRef = collection(db, 'listing')
+      const q = query(
+        listingRef,
+        where('offer', '==', true),
+        orderBy('timestamp', 'desc'),
+        startAfter(lastFetchedListing),
+        limit(10)
+      )
+
+      const querySnap = await getDocs(q)
+
+      const lastVisible = querySnap.docs[querySnap.docs.length - 1]
+      setLastFetchedListing(lastVisible)
+      const listing = []
+
+      querySnap.forEach((doc) => {
+        return listing.push({
+          id: doc.id,
+          data: doc.data(),
+        })
+      })
+      setListings((prevState) => [...prevState, ...listing])
+      setLoading(false)
+      console.log(listing)
+    } catch (error) {
+      console.log(error)
+      toast.error('Something Went Wrong')
+    }
+  }
 
   return (
     <div className='category'>
@@ -76,6 +111,14 @@ const Offers = () => {
               })}
             </ul>
           </main>
+          <br />
+          <br />
+
+          {lastFetchedListing && (
+            <p className='loadMore' onClick={fetchMoreListing}>
+              Load More
+            </p>
+          )}
         </>
       ) : (
         <p>There is no current Offers</p>
