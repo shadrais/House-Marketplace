@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -17,7 +17,6 @@ const Listing = (second) => {
   const [copiedToClipboard, setCopiedToClipboard] = useState(false)
   const [listing, setListing] = useState(null)
 
-  const navigate = useNavigate()
   const auth = getAuth()
   const params = useParams()
 

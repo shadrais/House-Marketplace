@@ -33,6 +33,7 @@ const CreateListing = () => {
     latitude: 0,
     logitude: 0,
   })
+  // eslint-disable-next-line no-unused-vars
   const [geoloactionEnabled, setGeoloactionEnabled] = useState(true)
 
   useEffect(() => {
