@@ -3,10 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
+import 'swiper/swiper-bundle.css'
 
 import { getDoc, doc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
@@ -48,7 +45,7 @@ const Listing = (second) => {
             <div
               style={{
                 background: `url(${listing.imgUrls[index]}) center no-repeat`,
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
               }}
               className='swiperSlideDiv'></div>
           </SwiperSlide>
