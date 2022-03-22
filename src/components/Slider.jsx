@@ -36,10 +36,6 @@ function Slider() {
     fetchListings()
   }, [])
 
-  if (listings.length === 0) {
-    return <></>
-  }
-
   if (loading) {
     return <Spinner />
   }
